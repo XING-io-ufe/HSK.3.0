@@ -1,0 +1,91 @@
+@import "tailwindcss";
+
+:root {
+  /* Ердийн үеийн (Light mode) өнгө */
+  --background: #f6f8f6;
+  /* background-light өнгөөр солив */
+  --foreground: #171717;
+}
+
+@theme inline {
+  /* Tailwind-д зориулсан тохиргоо */
+  --color-primary: #13ec25;
+  --color-primary-dark: #0fb81d;
+  --color-background-light: #f6f8f6;
+  --color-background-dark: #0A0A0A;
+  --color-surface-dark: #111111;
+  --color-surface-glass: rgba(20, 20, 20, 0.6);
+  --font-display: "Space Grotesk", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Харанхуй үеийн өнгө */
+    --background: #0A0A0A;
+    /* background-dark өнгөөр солив */
+    --foreground: #ffffff;
+  }
+}
+
+body {
+  /* Одоо энэ утгууд Dark/Light mode-оос хамаарч автоматаар солигдоно */
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-display);
+  /* Space Grotesk-оо энд холбож өгнө */
+}
+
+/* Utility classes migrated from the old inline <style> block */
+.glass-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.neon-glow {
+  box-shadow: 0 0 20px rgba(19, 236, 37, 0.3);
+}
+
+.neon-text-glow {
+  text-shadow: 0 0 10px rgba(19, 236, 37, 0.5);
+}
+
+.bg-grid-pattern {
+  background-image:
+    linear-gradient(to right, #222 1px, transparent 1px),
+    linear-gradient(to bottom, #222 1px, transparent 1px);
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.1;
+  }
+
+  50% {
+    transform: translateY(-20px) rotate(5deg);
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: translateY(0px) rotate(0deg);
+    opacity: 0.1;
+  }
+}
+
+.floating-char {
+  animation: float 6s ease-in-out infinite;
+}
+
+.delay-100 {
+  animation-delay: 1s;
+}
+
+.delay-200 {
+  animation-delay: 2s;
+}
+
+.delay-300 {
+  animation-delay: 3s;
+}
