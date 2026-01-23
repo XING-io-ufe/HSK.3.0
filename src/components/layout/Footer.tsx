@@ -1,6 +1,6 @@
 "use client"
 import Image from "next/image";
-import { FaFacebookF, FaInstagram, FaTwitter } from '@/components/icon/Font_Awesome_icon';
+import { FaFacebookF, FaInstagram, FaTwitter } from '@/components/icons/font-awesome';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 

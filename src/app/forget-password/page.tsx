@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import { MdAlternateEmail, MdArrowForward } from '@/components/icon/Material_icon';
+import { MdAlternateEmail, MdArrowForward } from '@/components/icons/material';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 

@@ -10,14 +10,14 @@ import {
     MdHistoryEdu,
     MdAutoStories,
     MdRocketLaunch,
-} from 'react-icons/md';
+} from '@/components/icons/material';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 
 export default function LessonPage() {
     const { lang } = useLanguage();
     return (
-        <div className="bg-background-dark text-white overflow-x-hidden selection:bg-primary selection:text-black">
+        <div className="text-white overflow-x-hidden selection:bg-primary selection:text-black">
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute inset-0 bg-grid-pattern opacity-[0.07]"></div>
                 <div className="absolute inset-0 bg-linear-to-b from-background-dark via-transparent to-background-dark"></div>

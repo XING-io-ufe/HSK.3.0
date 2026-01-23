@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import Navbar from '@/components/navbar/Navbar';
-import Footer from '@/components/footer/footer';
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
+import { LayoutShell } from '@/components/layout';
 
 // Space Grotesk фонт тохиргоо
 const spaceGrotesk = Space_Grotesk({
@@ -27,9 +26,9 @@ export default function RootLayout({
     <html lang="mn">
       <body className={`${spaceGrotesk.variable} antialiased`}>
         <LanguageProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <LayoutShell>
+            {children}
+          </LayoutShell>
         </LanguageProvider>
       </body>
     </html>

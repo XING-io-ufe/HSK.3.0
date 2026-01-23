@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from 'next/link';
-import { MdMenu, MdClose } from '@/components/icon/Material_icon';
+import { MdMenu, MdClose } from '@/components/icons/material';
 import { usePathname } from 'next/navigation';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';

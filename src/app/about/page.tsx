@@ -8,14 +8,14 @@ import {
     MdTerminal,
     MdGroup,
     MdVisibility,
-} from 'react-icons/md';
+} from '@/components/icons/material';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 
 export default function AboutPage() {
     const { lang } = useLanguage();
     return (
-        <div className="bg-background-dark text-white overflow-x-hidden selection:bg-primary selection:text-black">
+        <div className="text-white overflow-x-hidden selection:bg-primary selection:text-black">
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute inset-0 bg-grid-pattern opacity-[0.07]"></div>
                 <div className="absolute inset-0 bg-linear-to-b from-background-dark via-transparent to-background-dark"></div>
@@ -113,7 +113,7 @@ export default function AboutPage() {
                         </div>
                     </section>
 
-                    <section className="w-full py-20 bg-background-dark relative">
+                    <section className="w-full py-20 relative">
                         <div className="absolute inset-0 bg-grid-pattern opacity-[0.03]"></div>
                         <div className="container mx-auto px-4 max-w-5xl relative z-10">
                             <div className="text-center mb-16">

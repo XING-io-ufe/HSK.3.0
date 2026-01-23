@@ -159,6 +159,17 @@ export const translations: Record<Lang, Record<string, string>> = {
         authResetSubtitle: "Имэйл эсвэл утасны дугаараа оруулаад сэргээх зааврыг илгээнэ үү.",
         authSend: "Илгээх",
         authBack: "Буцах — Нэвтрэх хуудас",
+        // Dashboard
+        dashboardNavMain: "Үндсэн",
+        dashboardNavSettings: "Тохиргоо",
+        dashboardNavStatistics: "Статистик",
+        dashboardNavLevels: "HSK Түвшин",
+        dashboardNavProgress: "Миний явц",
+        dashboardNavAIAssistant: "AI Туслагч",
+        dashboardPremiumOnly: "Зөвхөн төлбөртэй",
+        dashboardGuestUser: "Зочин хэрэглэгч",
+        dashboardFreePlan: "Free Plan",
+        dashboardProPlan: "Pro Plan",
     },
     en: {
         ...common,
@@ -315,6 +326,17 @@ export const translations: Record<Lang, Record<string, string>> = {
         authResetSubtitle: "Enter your email or phone and we'll send reset instructions.",
         authSend: "Send",
         authBack: "Back to Login",
+        // Dashboard
+        dashboardNavMain: "Main",
+        dashboardNavSettings: "Settings",
+        dashboardNavStatistics: "Statistics",
+        dashboardNavLevels: "HSK Levels",
+        dashboardNavProgress: "My Progress",
+        dashboardNavAIAssistant: "AI Assistant",
+        dashboardPremiumOnly: "Premium Only",
+        dashboardGuestUser: "Guest User",
+        dashboardFreePlan: "Free Plan",
+        dashboardProPlan: "Pro Plan",
     },
 };
 

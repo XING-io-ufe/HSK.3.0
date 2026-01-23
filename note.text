@@ -1,0 +1,106 @@
+import {
+    MdCheck,
+    MdLibraryBooks,
+    MdQuiz,
+    MdPlayArrow,
+    MdEmojiEvents,
+    MdArrowForward,
+} from '@/components/icons/material';
+import LessonFullCard from './LessonFullCard';
+import LessonLockedCard from './LessonLockedCard';
+import LessonSimplifiedRow from './LessonSimplifiedRow';
+import LessonFinalExam from './LessonFinalExam';
+import LessonMarker from './LessonMarker';
+
+const lockedLessons: Array<{ title: string; chinese: string; layoutSide: 'left' | 'right' }> = [
+    // { title: 'Lesson 3: Тоо тоолол', chinese: '一二三', layoutSide: 'right' },
+    // { title: 'Lesson 4: Гэр бүл', chinese: '家', layoutSide: 'left' },
+    // { title: 'Lesson 5: Сургууль дээр', chinese: '学校', layoutSide: 'right' },
+    // { title: 'Lesson 6: Хоол хүнс', chinese: '饭', layoutSide: 'left' },
+];
+
+const simplifiedLessons = [
+    { title: 'Lesson 3: Тоо тоолол', chinese: '一二三', translation: 'Numbers and counting', layoutSide: 'right', opacity: 0.4 },
+    { title: 'Lesson 4: Гэр бүл', chinese: '家', translation: 'Family and relationships', layoutSide: 'left', opacity: 0.35 },
+    { title: 'Lesson 5: Сургууль дээр', chinese: '学校', translation: 'School vocabulary', layoutSide: 'right', opacity: 0.3 },
+    { title: 'Lesson 6: Хоол хүнс', chinese: '饭', translation: 'Food and ordering', layoutSide: 'left', opacity: 0.3 },
+    { title: 'Lesson 7: Цаг хугацаа', chinese: '时间', translation: 'Time & scheduling', layoutSide: 'right', opacity: 0.25 },
+    { title: 'Lesson 8: Дэлгүүр хэсэх', chinese: '买', translation: 'Shopping vocabulary', layoutSide: 'left', opacity: 0.25 },
+    { title: 'Lesson 9: Байршил', chinese: '在哪儿', translation: 'Asking for locations', layoutSide: 'right', opacity: 0.2 },
+    { title: 'Lesson 10: Цаг агаар', chinese: '天气', translation: 'Talking about weather', layoutSide: 'left', opacity: 0.2 },
+];
+
+export default function LessonTimeline() {
+    return (
+        <div className="relative pl-8 md:pl-0">
+            <div className="absolute left-8 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-success via-primary to-[#282e39] md:-ml-[1px]" />
+
+            <LessonFullCard
+                layoutSide="right"
+                marker={(
+                    <LessonMarker
+                        status="completed"
+                        icon={<MdCheck className="text-xl font-bold" />}
+                        sizeClass="h-12 w-12"
+                    />
+                )}
+                badgeLabel="Дууссан"
+                badgeTone="success"
+                progressValue="100%"
+                title="Lesson 1: Сайн байна уу"
+                chinese="你好"
+                pinyin="Nǐ hǎo"
+                description="Сайн танилцаж, өдөр тутмын мэндчилгээ, анхан шатны үг хэллэгүүдийг давтах хичээл."
+                stats={[
+                    { icon: <MdLibraryBooks className="text-[16px]" />, label: '10 үг' },
+                    { icon: <MdQuiz className="text-[16px]" />, label: 'Шалгалт' },
+                ]}
+            />
+
+            <LessonFullCard
+                layoutSide="left"
+                marker={(
+                    <LessonMarker
+                        status="active"
+                        icon={<MdPlayArrow className="text-2xl" />}
+                        sizeClass="h-12 w-12"
+                    />
+                )}
+                badgeLabel="Нээлттэй"
+                badgeTone="primary"
+                progressValue="0%"
+                title="Lesson 2: Би"
+                chinese="我"
+                pinyin="Wǒ"
+                description="Өөрийгөө танилцуулах болон хувь хүний нэрсийн тухай үгсийг таньж, энгийн өгүүлбэр бүтээх."
+                actionLabel="Эхлүүлэх"
+                actionIcon={<MdArrowForward className="text-lg" />}
+            />
+
+            {lockedLessons.map((lesson) => (
+                <LessonLockedCard
+                    key={lesson.title}
+                    layoutSide={lesson.layoutSide}
+                    title={lesson.title}
+                    chinese={lesson.chinese}
+                />
+            ))}
+
+            {simplifiedLessons.map((lesson) => (
+                <LessonSimplifiedRow
+                    key={lesson.title}
+                    title={lesson.title}
+                    translation={lesson.translation}
+                    chinese={lesson.chinese}
+                    layoutSide={lesson.layoutSide as 'left' | 'right'}
+                    opacity={lesson.opacity}
+                />
+            ))}
+
+            <LessonFinalExam
+                icon={<MdEmojiEvents className="text-3xl" />}
+                title="Lesson 15: Шалгалт"
+                description="Final Exam (考试)" />
+        </div>
+    );
+}

@@ -8,7 +8,7 @@ import {
     MdAlternateEmail,
     MdLockOpen,
     MdArrowForward,
-} from "@/components/icon/Material_icon";
+} from '@/components/icons/material';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 
@@ -68,7 +68,7 @@ export default function LoginPage() {
     const { lang } = useLanguage();
 
     return (
-        <main className="relative overflow-hidden bg-background-dark text-white selection:bg-primary selection:text-black">
+        <main className="relative overflow-hidden text-white selection:bg-primary selection:text-black">
             <div className="pointer-events-none absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-grid-pattern opacity-[0.07]"></div>
                 <div className="absolute inset-0 bg-linear-to-b from-background-dark via-transparent to-background-dark"></div>

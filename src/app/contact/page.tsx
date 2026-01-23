@@ -1,6 +1,6 @@
 "use client";
-import { MdAlternateEmail, MdSupportAgent, MdLocationOn, MdSend } from '@/components/icon/Material_icon';
-import { FaFacebookF, FaInstagram, FaTwitter } from '@/components/icon/Font_Awesome_icon';
+import { MdAlternateEmail, MdSupportAgent, MdLocationOn, MdSend } from '@/components/icons/material';
+import { FaFacebookF, FaInstagram, FaTwitter } from '@/components/icons/font-awesome';
 import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 
