@@ -1,6 +1,8 @@
-"use client";
-import Link from 'next/link';
-import type { ReactNode } from 'react';
+﻿"use client";
+
+import { usePathname, useRouter } from 'next/navigation';
+import type { MouseEvent, ReactNode } from 'react';
+
 import {
     MdArrowBack,
     MdMenuBook,
@@ -38,7 +40,7 @@ type CourseSidebarProps = {
 export default function CourseSidebar({
     courseLevel = 1,
     courseName = 'HSK 1',
-    courseSubtitle = 'Анхан шат • 150 ханз',
+    courseSubtitle = 'Анхан шат  150 ханз',
     progress = 45,
     progressMax = 150,
     sections,
@@ -46,6 +48,8 @@ export default function CourseSidebar({
     showSections = true,
 }: CourseSidebarProps) {
     const user = useUser();
+    const router = useRouter();
+    const pathname = usePathname();
     const progressPercent = Math.min(100, Math.round((progress / progressMax) * 100));
 
     const stats = [
@@ -71,14 +75,64 @@ export default function CourseSidebar({
         { href: '#practice', label: 'Асуултууд', icon: <MdQuiz size={18} /> },
     ];
 
+    const handleBack = (e?: MouseEvent<HTMLAnchorElement>) => {
+        e?.preventDefault();
+        const ref = typeof document !== 'undefined' ? document.referrer : '';
+        const current = pathname || '';
+
+        try {
+            if (ref && ref.startsWith(window.location.origin)) {
+                if (ref.includes('/dashboard/lessons')) {
+                    router.push('/dashboard/lessons');
+                    return;
+                }
+                if (ref.includes('/dashboard')) {
+                    router.push('/dashboard');
+                    return;
+                }
+                // if external ref, just go back in history
+                router.back();
+                return;
+            }
+        } catch (err) {
+            // ignore and fallback to path-based logic
+        }
+
+        // No ref available (direct entry). Decide based on current route.
+        if (current.startsWith('/dashboard/lessons/lesson-')) {
+            router.push('/dashboard/lessons');
+            return;
+        }
+        if (current === '/dashboard/lessons') {
+            router.push('/dashboard');
+            return;
+        }
+
+        router.push('/dashboard');
+    };
+
+    const handleSectionClick = (e: MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+        const id = href.startsWith('#') ? href.slice(1) : href;
+        const el = typeof document !== 'undefined' ? document.getElementById(id) : null;
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try {
+            const search = typeof window !== 'undefined' ? window.location.search : '';
+            router.replace(`${pathname}${search}#${id}`);
+        } catch (err) {
+            // ignore
+        }
+    };
+
     const header = (
-        <Link
+        <a
             href="/dashboard/lessons"
+            onClick={handleBack}
             className="flex items-center gap-2 text-text-secondary hover:text-white transition-colors"
         >
             <MdArrowBack size={20} />
             <span className="text-sm font-medium">Буцах</span>
-        </Link>
+        </a>
     );
 
     const footer = (
@@ -150,6 +204,7 @@ export default function CourseSidebar({
                             <a
                                 key={section.href}
                                 href={section.href}
+                                onClick={(e) => handleSectionClick(e, section.href)}
                                 className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
                             >
                                 <span className="text-primary">{section.icon}</span>
