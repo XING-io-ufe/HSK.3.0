@@ -1,37 +1,24 @@
 "use client";
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 import {
     MdArrowBack,
+    MdMenuBook,
+    MdPsychology,
+    MdQuiz,
+    MdPlayArrow,
     MdLocalFireDepartment,
     MdBolt,
 } from '@/components/icons/material';
-import type { ReactNode } from 'react';
 import BaseSidebar from './BaseSidebar';
 import SidebarUserProfile from './SidebarUserProfile';
+import useUser from '@/lib/useUser';
 
-type StatisticTileProps = {
-    icon: ReactNode;
-    value: string;
+type LessonNavItem = {
+    href: string;
     label: string;
-    iconBgClass?: string;
+    icon: ReactNode;
 };
-
-/**
- * StatisticTile - Display a stat with icon, value and label
- */
-function StatisticTile({ icon, value, label, iconBgClass = 'bg-primary/20 text-primary' }: StatisticTileProps) {
-    return (
-        <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-border-muted">
-            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${iconBgClass}`}>
-                {icon}
-            </div>
-            <div>
-                <div className="text-lg font-bold text-white">{value}</div>
-                <div className="text-xs text-text-muted">{label}</div>
-            </div>
-        </div>
-    );
-}
 
 type CourseSidebarProps = {
     courseLevel?: number;
@@ -39,14 +26,14 @@ type CourseSidebarProps = {
     courseSubtitle?: string;
     progress?: number;
     progressMax?: number;
-    userName?: string;
-    userPlan?: string;
-    userInitial?: string;
+    sections?: LessonNavItem[];
+    showStats?: boolean;
+    showSections?: boolean;
 };
 
 /**
  * CourseSidebar - Sidebar for course and lesson pages
- * Shows course progress, stats, and user profile
+ * Shows course progress and quick navigation links for the lesson
  */
 export default function CourseSidebar({
     courseLevel = 1,
@@ -54,11 +41,12 @@ export default function CourseSidebar({
     courseSubtitle = 'Анхан шат • 150 ханз',
     progress = 45,
     progressMax = 150,
-    userName = 'Батаа',
-    userPlan = 'Pro Plan',
-    userInitial = 'Б',
+    sections,
+    showStats = true,
+    showSections = true,
 }: CourseSidebarProps) {
-    const progressPercent = Math.round((progress / progressMax) * 100);
+    const user = useUser();
+    const progressPercent = Math.min(100, Math.round((progress / progressMax) * 100));
 
     const stats = [
         {
@@ -75,9 +63,17 @@ export default function CourseSidebar({
         },
     ];
 
+    const sectionLinks: LessonNavItem[] = sections ?? [
+        { href: '#overview', label: 'Товч танилцуулга', icon: <MdPlayArrow size={18} /> },
+        { href: '#vocab', label: 'Шинэ үгс', icon: <MdMenuBook size={18} /> },
+        { href: '#radicals', label: 'Язгуур түвшин', icon: <MdPsychology size={18} /> },
+        { href: '#sentences', label: 'Өгүүлбэрүүд', icon: <MdMenuBook size={18} /> },
+        { href: '#practice', label: 'Асуултууд', icon: <MdQuiz size={18} /> },
+    ];
+
     const header = (
         <Link
-            href="/dashboard"
+            href="/dashboard/lessons"
             className="flex items-center gap-2 text-text-secondary hover:text-white transition-colors"
         >
             <MdArrowBack size={20} />
@@ -87,10 +83,11 @@ export default function CourseSidebar({
 
     const footer = (
         <SidebarUserProfile
-            name={userName}
-            plan={userPlan}
-            avatarInitial={userInitial}
-            variant="gradient"
+            name={user.name}
+            plan={user.plan}
+            avatar={user.avatar}
+            avatarInitial={user.avatarInitial}
+            variant="default"
         />
     );
 
@@ -112,7 +109,6 @@ export default function CourseSidebar({
                     </div>
                 </div>
 
-                {/* Progress */}
                 <div className="space-y-2">
                     <div className="flex justify-between text-xs">
                         <span className="text-text-secondary">Явц</span>
@@ -127,18 +123,42 @@ export default function CourseSidebar({
                 </div>
             </div>
 
-            {/* Stats */}
-            <div className="p-4 space-y-3">
-                {stats.map((stat, index) => (
-                    <StatisticTile
-                        key={index}
-                        icon={stat.icon}
-                        value={stat.value}
-                        label={stat.label}
-                        iconBgClass={stat.iconBgClass}
-                    />
-                ))}
-            </div>
+            {showStats && (
+                <div className="pt-4 space-y-2">
+                    {stats.map((stat) => (
+                        <div
+                            key={stat.label}
+                            className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-border-muted"
+                        >
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.iconBgClass}`}>
+                                {stat.icon}
+                            </div>
+                            <div>
+                                <div className="text-lg font-bold text-white">{stat.value}</div>
+                                <div className="text-xs text-text-muted">{stat.label}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {showSections && (
+                <div className="p-4 space-y-3">
+                    <div className="text-xs uppercase tracking-widest text-text-muted font-semibold px-2">Хичээлийн бүтэц</div>
+                    <div className="space-y-1">
+                        {sectionLinks.map((section) => (
+                            <a
+                                key={section.href}
+                                href={section.href}
+                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
+                            >
+                                <span className="text-primary">{section.icon}</span>
+                                <span>{section.label}</span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
         </BaseSidebar>
     );
 }

@@ -11,16 +11,18 @@ export default function DashboardLayout({
 }) {
     const { lang } = useLanguage();
     const pathname = usePathname();
-    const isCourse = pathname?.startsWith('/dashboard/lessons');
+    const isLessonsRoute = pathname?.startsWith('/dashboard/lessons');
+    const isCoursePage = pathname?.startsWith('/dashboard/lessons/course')
+        || pathname?.startsWith('/dashboard/lessons/lesson-');
 
     return (
         <div className="flex h-screen">
             {/* Sidebar - switches based on route */}
-            {isCourse ? <CourseSidebar /> : <DashboardSidebar />}
+            {isLessonsRoute ? <CourseSidebar showStats={!isCoursePage} showSections={isCoursePage} /> : <DashboardSidebar />}
 
             {/* Main content */}
-            <main className={`relative z-10 flex-1 flex flex-col h-full ${isCourse ? 'overflow-auto' : 'overflow-hidden'}`}>
-                {!isCourse && (
+            <main className={`relative z-10 flex-1 flex flex-col h-full ${isLessonsRoute ? 'overflow-auto' : 'overflow-hidden'}`}>
+                {!isLessonsRoute && (
                     <DashboardHeader
                         title={t(lang, 'dashboardNavMain')}
                         subtitle={t(lang, 'dashboardNavAIAssistant')}

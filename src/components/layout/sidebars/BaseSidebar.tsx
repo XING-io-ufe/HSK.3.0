@@ -17,7 +17,7 @@ export default function BaseSidebar({
     children,
     header,
     footer,
-    width = 'w-64',
+    width = 'w-72',
     className = '',
 }: BaseSidebarProps) {
     return (

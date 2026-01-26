@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 
 type LessonFullCardProps = {
     layoutSide?: 'left' | 'right';
@@ -13,6 +14,7 @@ type LessonFullCardProps = {
     stats?: Array<{ icon: ReactNode; label: string }>;
     actionLabel?: string;
     actionIcon?: ReactNode;
+    actionHref?: string;
 };
 
 const badgeToneClasses: Record<LessonFullCardProps['badgeTone'], string> = {
@@ -34,6 +36,7 @@ export default function LessonFullCard({
     stats,
     actionLabel,
     actionIcon,
+    actionHref,
 }: LessonFullCardProps) {
     const isRight = layoutSide === 'right';
 
@@ -77,11 +80,14 @@ export default function LessonFullCard({
                         </div>
                     )}
 
-                    {actionLabel && (
-                        <button className="w-full py-3 bg-primary hover:bg-primary-glow text-white font-bold rounded-lg shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all">
+                    {actionLabel && actionHref && (
+                        <Link
+                            href={actionHref}
+                            className="w-full py-3 bg-primary hover:bg-primary-glow text-white font-bold rounded-lg shadow-lg shadow-primary/30 flex items-center justify-center gap-2 transition-all"
+                        >
                             <span>{actionLabel}</span>
                             {actionIcon}
-                        </button>
+                        </Link>
                     )}
                 </div>
             </div>

@@ -41,7 +41,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen bg-background-dark text-white p-6 md:p-8">
+        <div className="min-h-screen overflow-auto bg-background-dark text-white p-6 md:p-8 pb-24 md:pb-32">
             <div className="max-w-2xl mx-auto">
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">Тохиргоо</h1>
                 <p className="text-gray-500 mb-8">Хэрэглэгчийн тохиргоогоо удирдах</p>
@@ -167,8 +167,8 @@ export default function SettingsPage() {
                                         type="button"
                                         onClick={() => update('theme', 'light')}
                                         className={`flex-1 py-3 px-4 rounded-lg border transition-all flex items-center justify-center gap-2 ${settings.theme === 'light'
-                                                ? 'border-primary bg-primary/10 text-primary'
-                                                : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
+                                            ? 'border-primary bg-primary/10 text-primary'
+                                            : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
                                             }`}
                                     >
                                         ☀️ Цайвар
@@ -178,8 +178,8 @@ export default function SettingsPage() {
                                         type="button"
                                         onClick={() => update('theme', 'dark')}
                                         className={`flex-1 py-3 px-4 rounded-lg border transition-all flex items-center justify-center gap-2 ${settings.theme === 'dark'
-                                                ? 'border-primary bg-primary/10 text-primary'
-                                                : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
+                                            ? 'border-primary bg-primary/10 text-primary'
+                                            : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
                                             }`}
                                     >
                                         🌙 Бараан
@@ -208,8 +208,8 @@ export default function SettingsPage() {
                             type="submit"
                             disabled={status === 'saving'}
                             className={`flex-1 py-4 rounded-lg font-bold text-base transition-all flex items-center justify-center gap-2 ${status === 'saved'
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-primary text-black hover:bg-white'
+                                ? 'bg-green-500 text-white'
+                                : 'bg-primary text-black hover:bg-white'
                                 }`}
                         >
                             {status === 'saving' ? (

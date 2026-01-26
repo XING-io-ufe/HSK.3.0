@@ -12,6 +12,7 @@ import {
 import BaseSidebar from './BaseSidebar';
 import SidebarNav, { type NavItem } from './SidebarNav';
 import SidebarUserProfile from './SidebarUserProfile';
+import useUser from '@/lib/useUser';
 import SidebarBrand from './SidebarBrand';
 
 /**
@@ -20,6 +21,8 @@ import SidebarBrand from './SidebarBrand';
  */
 export default function DashboardSidebar() {
     const { lang } = useLanguage();
+
+    const user = useUser();
 
     const navItems: NavItem[] = [
         {
@@ -54,13 +57,7 @@ export default function DashboardSidebar() {
     return (
         <BaseSidebar
             header={<SidebarBrand />}
-            footer={
-                <SidebarUserProfile
-                    name={t(lang, 'dashboardGuestUser')}
-                    plan={t(lang, 'dashboardProPlan')}
-                    variant="default"
-                />
-            }
+            footer={<SidebarUserProfile name={user.name} plan={user.plan} avatarInitial={user.avatarInitial} variant="default" />}
         >
             <div className="mt-8">
                 <SidebarNav items={navItems} />

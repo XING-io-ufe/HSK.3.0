@@ -3,6 +3,7 @@ import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from '@/components/i18n/LanguageProvider';
 import { LayoutShell } from '@/components/layout';
+import { BackgroundEffects } from "@/components/ui";
 
 // Space Grotesk фонт тохиргоо
 const spaceGrotesk = Space_Grotesk({
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body className={`${spaceGrotesk.variable} antialiased`}>
         <LanguageProvider>
           <LayoutShell>
+            <BackgroundEffects variant="minimal" />
             {children}
           </LayoutShell>
         </LanguageProvider>
