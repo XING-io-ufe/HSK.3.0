@@ -2,6 +2,7 @@ export { default as Navbar } from './Navbar';
 export { default as Footer } from './Footer';
 export { default as LayoutShell } from './LayoutShell';
 export { default as DashboardHeader } from './DashboardHeader';
+export { default as LessonMobileHeader } from './LessonMobileHeader';
 
 // Sidebar exports
 export {
@@ -11,5 +12,6 @@ export {
     SidebarBrand,
     DashboardSidebar,
     CourseSidebar,
+    getDashboardNavItems,
 } from './sidebars';
 export type { NavItem } from './sidebars';

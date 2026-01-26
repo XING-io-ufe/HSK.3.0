@@ -7,3 +7,6 @@ export { default as CourseSidebar } from './CourseSidebar';
 
 // Re-export types
 export type { NavItem } from './SidebarNav';
+
+// Re-export navigation config
+export { getDashboardNavItems } from './navConfig';

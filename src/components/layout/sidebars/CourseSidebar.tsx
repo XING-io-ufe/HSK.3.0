@@ -1,5 +1,6 @@
 ﻿"use client";
 
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import type { MouseEvent, ReactNode } from 'react';
 
@@ -80,6 +81,12 @@ export default function CourseSidebar({
         const ref = typeof document !== 'undefined' ? document.referrer : '';
         const current = pathname || '';
 
+        // If we're on a lesson detail, prefer sending the user to the lessons list first.
+        if (current.startsWith('/dashboard/lessons/')) {
+            router.push('/dashboard/lessons');
+            return;
+        }
+
         try {
             if (ref && ref.startsWith(window.location.origin)) {
                 if (ref.includes('/dashboard/lessons')) {
@@ -90,24 +97,15 @@ export default function CourseSidebar({
                     router.push('/dashboard');
                     return;
                 }
-                // if external ref, just go back in history
+                // external ref -> go back in history
                 router.back();
                 return;
             }
         } catch (err) {
-            // ignore and fallback to path-based logic
+            // ignore and fallback
         }
 
-        // No ref available (direct entry). Decide based on current route.
-        if (current.startsWith('/dashboard/lessons/lesson-')) {
-            router.push('/dashboard/lessons');
-            return;
-        }
-        if (current === '/dashboard/lessons') {
-            router.push('/dashboard');
-            return;
-        }
-
+        // fallback
         router.push('/dashboard');
     };
 
@@ -125,14 +123,14 @@ export default function CourseSidebar({
     };
 
     const header = (
-        <a
+        <Link
             href="/dashboard/lessons"
             onClick={handleBack}
             className="flex items-center gap-2 text-text-secondary hover:text-white transition-colors"
         >
             <MdArrowBack size={20} />
             <span className="text-sm font-medium">Буцах</span>
-        </a>
+        </Link>
     );
 
     const footer = (

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from 'next/link';
 import { MdMenu, MdClose } from '@/components/icons/material';
@@ -10,7 +10,14 @@ import { t } from '@/components/i18n/translations';
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     const pathname = usePathname() || '/';
-    const { lang, toggleLang } = useLanguage();
+    const { lang, toggleLang, mounted } = useLanguage();
+
+    // Close mobile menu when pathname changes to prevent stale state on navigation
+    useEffect(() => {
+        // Defer the state update to avoid calling setState synchronously within the effect
+        const t = setTimeout(() => setOpen(false), 0);
+        return () => clearTimeout(t);
+    }, [pathname]);
 
     const isActive = (href: string) => {
         if (!href || href === '#') return false;
@@ -22,6 +29,16 @@ export default function Navbar() {
     const inactiveDesktop = 'text-gray-300 hover:text-primary';
     const baseMobile = 'block text-lg font-medium transition-colors cursor-pointer';
     const inactiveMobile = 'text-gray-200 hover:text-white';
+
+    // Show skeleton for language button until mounted to prevent hydration mismatch
+    const langButtonContent = mounted ? (
+        <>
+            <span>{lang === 'mn' ? 'MN' : 'EN'}</span>
+            <span className="text-[11px] text-gray-400">{t(lang, 'langToggleLabel')}</span>
+        </>
+    ) : (
+        <span className="w-16 h-4 bg-white/10 rounded animate-pulse" />
+    );
 
     return (
         <>
@@ -45,11 +62,11 @@ export default function Navbar() {
                             <button
                                 type="button"
                                 onClick={toggleLang}
-                                className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-gray-200 hover:border-primary hover:text-white transition"
+                                disabled={!mounted}
+                                className="hidden sm:inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-xs font-semibold text-gray-200 hover:border-primary hover:text-white transition disabled:opacity-50"
                                 aria-label="Toggle language"
                             >
-                                <span>{lang === 'mn' ? 'MN' : 'EN'}</span>
-                                <span className="text-[11px] text-gray-400">{t(lang, 'langToggleLabel')}</span>
+                                {langButtonContent}
                             </button>
                             {(!pathname || !pathname.startsWith('/login')) && (
                                 <Link href="/login" className="hidden sm:inline-flex h-9 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-black transition-transform hover:scale-105 hover:bg-white neon-glow">
@@ -90,7 +107,8 @@ export default function Navbar() {
                         <button
                             type="button"
                             onClick={() => { toggleLang(); setOpen(false); }}
-                            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm font-semibold text-gray-200 hover:border-primary hover:text-white transition"
+                            disabled={!mounted}
+                            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2 text-sm font-semibold text-gray-200 hover:border-primary hover:text-white transition disabled:opacity-50"
                         >
                             <span>{lang === 'mn' ? 'MN' : 'EN'}</span>
                             <span className="text-[12px] text-gray-400">{t(lang, 'langToggleLabel')}</span>

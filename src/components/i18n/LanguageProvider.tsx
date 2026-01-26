@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
@@ -9,31 +8,41 @@ type LanguageContextValue = {
     lang: Lang;
     setLang: (lang: Lang) => void;
     toggleLang: () => void;
+    mounted: boolean;
 };
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 const STORAGE_KEY = "hanzi.lang";
 
+// Helper to get initial language from localStorage (only runs on client)
+function getInitialLang(): Lang {
+    if (typeof window === "undefined") return "mn";
+    const stored = localStorage.getItem(STORAGE_KEY);
+    return stored === "en" || stored === "mn" ? stored : "mn";
+}
+
 export function LanguageProvider({ children }: { children: ReactNode }) {
     const [lang, setLangState] = useState<Lang>("mn");
+    const [mounted, setMounted] = useState(false);
 
+    // Initialize language from localStorage after mount to avoid hydration mismatch
     useEffect(() => {
-        const stored = typeof window !== "undefined" ? (localStorage.getItem(STORAGE_KEY) as Lang | null) : null;
-        if (stored === "en" || stored === "mn") {
-            setLangState(stored);
-        }
+        const storedLang = getInitialLang();
+        setLangState(storedLang);
+        setMounted(true);
     }, []);
 
+    // Persist language changes to localStorage
     useEffect(() => {
-        if (typeof window === "undefined") return;
+        if (!mounted) return;
         localStorage.setItem(STORAGE_KEY, lang);
         document.documentElement.lang = lang;
-    }, [lang]);
+    }, [lang, mounted]);
 
     const setLang = (value: Lang) => setLangState(value);
     const toggleLang = () => setLangState((prev) => (prev === "mn" ? "en" : "mn"));
 
-    const value = useMemo(() => ({ lang, setLang, toggleLang }), [lang]);
+    const value = useMemo(() => ({ lang, setLang, toggleLang, mounted }), [lang, mounted]);
 
     return <LanguageContext.Provider value={value}>{children}</LanguageContext.Provider>;
 }
