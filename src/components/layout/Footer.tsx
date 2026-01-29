@@ -7,7 +7,7 @@ import { t } from '@/components/i18n/translations';
 export default function Footer() {
     const { lang } = useLanguage();
     return (
-        <footer className="relative z-9999 border-t border-white/5 bg-[#000000] py-10">
+        <footer className="relative z-50 border-t border-white/5 bg-[#000000] py-10">
             <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-6">
                 <div className="flex items-center gap-2">
                     <Image src="/logo.png" alt="Hanzi.mn" width={36} height={36} className="h-10 w-10 object-none" />

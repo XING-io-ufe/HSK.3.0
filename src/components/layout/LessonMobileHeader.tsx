@@ -109,8 +109,8 @@ export default function LessonMobileHeader({
                         </button>
                     </div>
 
-                    <div className="flex flex-col h-full">
-                        <div className="flex-1 overflow-auto">
+                    <div className="flex flex-col flex-1">
+                        <div className="flex-1 p-0 h-full overflow-auto">
                             <CourseSidebarContent
                                 courseLevel={courseLevel}
                                 courseName={courseName}
@@ -122,10 +122,9 @@ export default function LessonMobileHeader({
                                 showSections={showSections}
                                 onSectionClick={handleSectionClick}
                             />
-                        </div>
-
-                        <div className="p-4 border-t border-white/5">
-                            <SidebarUserProfile name={user.name} plan={user.plan} avatarInitial={user.avatarInitial} variant="default" />
+                            <div className="p-4 border-t border-white/5">
+                                <SidebarUserProfile name={user.name} plan={user.plan} avatarInitial={user.avatarInitial} variant="default" />
+                            </div>
                         </div>
                     </div>
                 </aside>

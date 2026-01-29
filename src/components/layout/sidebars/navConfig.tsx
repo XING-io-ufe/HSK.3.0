@@ -6,6 +6,9 @@ import {
     MdSmartToy,
     MdSettings,
     MdLock,
+    MdLeaderboard,
+    MdOutlineAbc,
+    MdTranslate,
 } from '@/components/icons/material';
 import { t } from '@/components/i18n/translations';
 import type { Lang } from '@/components/i18n/translations';
@@ -38,6 +41,21 @@ export function getDashboardNavItems(lang: Lang): NavItem[] {
             icon: <MdSmartToy className="text-[20px]" />,
             disabled: true,
             badge: <MdLock className="text-[16px]" />,
+        },
+        {
+            href: '/dashboard/leaderboard',
+            label: t(lang, 'dashboardNavLeaderboard'),
+            icon: <MdLeaderboard className="text-[20px]" />,
+        },
+        {
+            href: '/dashboard/grammar',
+            label: t(lang, 'dashboardNavGrammar'),
+            icon: <MdOutlineAbc className="text-[20px]" />,
+        },
+        {
+            href: '/dashboard/dictionary',
+            label: t(lang, 'dashboardNavDictionary'),
+            icon: <MdTranslate className="text-[20px]" />,
         },
         {
             href: '/dashboard/settings',

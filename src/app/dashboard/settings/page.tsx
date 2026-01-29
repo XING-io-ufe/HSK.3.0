@@ -41,7 +41,7 @@ export default function SettingsPage() {
     };
 
     return (
-        <div className="min-h-screen overflow-auto bg-background-dark text-white p-6 md:p-8 pb-24 md:pb-32">
+        <div className="flex-1 min-h-0 overflow-auto bg-background-dark text-white p-6 md:p-8 pb-24 md:pb-32">
             <div className="max-w-2xl mx-auto">
                 <h1 className="text-2xl md:text-3xl font-bold mb-2">Тохиргоо</h1>
                 <p className="text-gray-500 mb-8">Хэрэглэгчийн тохиргоогоо удирдах</p>

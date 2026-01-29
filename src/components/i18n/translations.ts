@@ -170,6 +170,9 @@ export const translations: Record<Lang, Record<string, string>> = {
         dashboardGuestUser: "Зочин хэрэглэгч",
         dashboardFreePlan: "Free Plan",
         dashboardProPlan: "Pro Plan",
+        dashboardNavLeaderboard: "Шилдэг суралцагчид",
+        dashboardNavGrammar: "Хэл зүй",
+        dashboardNavDictionary: "Толь бичиг",
     },
     en: {
         ...common,

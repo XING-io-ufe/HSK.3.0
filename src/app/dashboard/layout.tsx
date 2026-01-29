@@ -3,6 +3,7 @@ import { useLanguage } from '@/components/i18n/LanguageProvider';
 import { t } from '@/components/i18n/translations';
 import { DashboardSidebar, CourseSidebar, DashboardHeader, LessonMobileHeader } from '@/components/layout';
 import { usePathname } from 'next/navigation';
+import Chatbot from '@/components/chatbot/Chatbot';
 
 export default function DashboardLayout({
     children,
@@ -41,6 +42,7 @@ export default function DashboardLayout({
 
                 {children}
             </main>
+            <Chatbot position="float" bottomOffset={50} zIndex={55} />
         </div>
     );
 }
