@@ -31,7 +31,13 @@ export default function DashboardLayout({
                 )}
 
                 {/* Mobile header for lesson routes (sidebar is hidden on mobile) */}
-                {isLessonsRoute && <LessonMobileHeader title={isCoursePage ? 'Хичээл' : 'Хичээлүүд'} />}
+                {isLessonsRoute && (
+                    <LessonMobileHeader
+                        title={isCoursePage ? 'Хичээл' : 'Хичээлүүд'}
+                        showStats={!isCoursePage}
+                        showSections={isCoursePage}
+                    />
+                )}
 
                 {children}
             </main>

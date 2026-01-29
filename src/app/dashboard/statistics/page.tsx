@@ -181,7 +181,7 @@ export default async function StatisticsPage() {
                                     </div>
                                     <div className="h-2 bg-white/5 rounded-full overflow-hidden">
                                         <div
-                                            className="h-full bg-gradient-to-r from-primary to-emerald-400 rounded-full"
+                                            className="h-full bg-linear-to-r from-primary to-emerald-400 rounded-full"
                                             style={{ width: `${item.percent}%` }}
                                         />
                                     </div>

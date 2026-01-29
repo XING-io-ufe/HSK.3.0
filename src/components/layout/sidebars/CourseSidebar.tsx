@@ -17,7 +17,7 @@ import BaseSidebar from './BaseSidebar';
 import SidebarUserProfile from './SidebarUserProfile';
 import useUser from '@/lib/useUser';
 
-type LessonNavItem = {
+export type LessonNavItem = {
     href: string;
     label: string;
     icon: ReactNode;
@@ -34,11 +34,11 @@ type CourseSidebarProps = {
     showSections?: boolean;
 };
 
-/**
- * CourseSidebar - Sidebar for course and lesson pages
- * Shows course progress and quick navigation links for the lesson
- */
-export default function CourseSidebar({
+export type CourseSidebarContentProps = CourseSidebarProps & {
+    onSectionClick?: (e: MouseEvent<HTMLAnchorElement>, href: string) => void;
+};
+
+function CourseSidebarContent({
     courseLevel = 1,
     courseName = 'HSK 1',
     courseSubtitle = 'Анхан шат  150 ханз',
@@ -47,10 +47,8 @@ export default function CourseSidebar({
     sections,
     showStats = true,
     showSections = true,
-}: CourseSidebarProps) {
-    const user = useUser();
-    const router = useRouter();
-    const pathname = usePathname();
+    onSectionClick,
+}: CourseSidebarContentProps) {
     const progressPercent = Math.min(100, Math.round((progress / progressMax) * 100));
 
     const stats = [
@@ -76,6 +74,92 @@ export default function CourseSidebar({
         { href: '#practice', label: 'Асуултууд', icon: <MdQuiz size={18} /> },
     ];
 
+    return (
+        <>
+            {/* Course Info */}
+            <div className="p-4 border-b border-border-muted">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-primary/30">
+                        {courseLevel}
+                    </div>
+                    <div>
+                        <h2 className="text-lg font-bold text-white">{courseName}</h2>
+                        <p className="text-xs text-text-muted">{courseSubtitle}</p>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="flex justify-between text-xs">
+                        <span className="text-text-secondary">Явц</span>
+                        <span className="text-primary font-medium">{progress} / {progressMax}</span>
+                    </div>
+                    <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+                        <div
+                            className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(19,236,37,0.5)]"
+                            style={{ width: `${progressPercent}%` }}
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {showStats && (
+                <div className="pt-4 space-y-2">
+                    {stats.map((stat) => (
+                        <div
+                            key={stat.label}
+                            className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-border-muted"
+                        >
+                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.iconBgClass}`}>
+                                {stat.icon}
+                            </div>
+                            <div>
+                                <div className="text-lg font-bold text-white">{stat.value}</div>
+                                <div className="text-xs text-text-muted">{stat.label}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {showSections && (
+                <div className="p-4 space-y-3">
+                    <div className="text-xs uppercase tracking-widest text-text-muted font-semibold px-2">Хичээлийн бүтэц</div>
+                    <div className="space-y-1">
+                        {sectionLinks.map((section) => (
+                            <a
+                                key={section.href}
+                                href={section.href}
+                                onClick={(e) => onSectionClick?.(e, section.href)}
+                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
+                            >
+                                <span className="text-primary">{section.icon}</span>
+                                <span>{section.label}</span>
+                            </a>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+/**
+ * CourseSidebar - Sidebar for course and lesson pages
+ * Shows course progress and quick navigation links for the lesson
+ */
+export default function CourseSidebar({
+    courseLevel = 1,
+    courseName = 'HSK 1',
+    courseSubtitle = 'Анхан шат  150 ханз',
+    progress = 45,
+    progressMax = 150,
+    sections,
+    showStats = true,
+    showSections = true,
+}: CourseSidebarProps) {
+    const user = useUser();
+    const router = useRouter();
+    const pathname = usePathname();
     const handleBack = (e?: MouseEvent<HTMLAnchorElement>) => {
         e?.preventDefault();
         const ref = typeof document !== 'undefined' ? document.referrer : '';
@@ -149,69 +233,19 @@ export default function CourseSidebar({
             header={header}
             footer={footer}
         >
-            {/* Course Info */}
-            <div className="p-4 border-b border-border-muted">
-                <div className="flex items-center gap-3 mb-4">
-                    <div className="h-12 w-12 rounded-xl bg-primary flex items-center justify-center text-black font-bold text-xl shadow-lg shadow-primary/30">
-                        {courseLevel}
-                    </div>
-                    <div>
-                        <h2 className="text-lg font-bold text-white">{courseName}</h2>
-                        <p className="text-xs text-text-muted">{courseSubtitle}</p>
-                    </div>
-                </div>
-
-                <div className="space-y-2">
-                    <div className="flex justify-between text-xs">
-                        <span className="text-text-secondary">Явц</span>
-                        <span className="text-primary font-medium">{progress} / {progressMax}</span>
-                    </div>
-                    <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
-                        <div
-                            className="h-full bg-primary rounded-full shadow-[0_0_10px_rgba(19,236,37,0.5)]"
-                            style={{ width: `${progressPercent}%` }}
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {showStats && (
-                <div className="pt-4 space-y-2">
-                    {stats.map((stat) => (
-                        <div
-                            key={stat.label}
-                            className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-border-muted"
-                        >
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${stat.iconBgClass}`}>
-                                {stat.icon}
-                            </div>
-                            <div>
-                                <div className="text-lg font-bold text-white">{stat.value}</div>
-                                <div className="text-xs text-text-muted">{stat.label}</div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {showSections && (
-                <div className="p-4 space-y-3">
-                    <div className="text-xs uppercase tracking-widest text-text-muted font-semibold px-2">Хичээлийн бүтэц</div>
-                    <div className="space-y-1">
-                        {sectionLinks.map((section) => (
-                            <a
-                                key={section.href}
-                                href={section.href}
-                                onClick={(e) => handleSectionClick(e, section.href)}
-                                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-text-secondary hover:text-white hover:bg-white/5 transition-colors"
-                            >
-                                <span className="text-primary">{section.icon}</span>
-                                <span>{section.label}</span>
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            )}
+            <CourseSidebarContent
+                courseLevel={courseLevel}
+                courseName={courseName}
+                courseSubtitle={courseSubtitle}
+                progress={progress}
+                progressMax={progressMax}
+                sections={sections}
+                showStats={showStats}
+                showSections={showSections}
+                onSectionClick={handleSectionClick}
+            />
         </BaseSidebar>
     );
 }
+
+export { CourseSidebarContent };

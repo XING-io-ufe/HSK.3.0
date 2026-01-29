@@ -2,16 +2,22 @@
 import React, { useState, useEffect } from 'react';
 import { MdMenu, MdClose, MdArrowBack } from '@/components/icons/material';
 import { useRouter, usePathname } from 'next/navigation';
-import { useLanguage } from '@/components/i18n/LanguageProvider';
-import SidebarNav from './sidebars/SidebarNav';
-import SidebarBrand from './sidebars/SidebarBrand';
 import SidebarUserProfile from './sidebars/SidebarUserProfile';
 import useUser from '@/lib/useUser';
-import { getDashboardNavItems } from './sidebars/navConfig';
+import { CourseSidebarContent } from './sidebars/CourseSidebar';
+import type { LessonNavItem } from './sidebars/CourseSidebar';
 
 type LessonMobileHeaderProps = {
     title?: string;
     showBackButton?: boolean;
+    courseLevel?: number;
+    courseName?: string;
+    courseSubtitle?: string;
+    progress?: number;
+    progressMax?: number;
+    sections?: LessonNavItem[];
+    showStats?: boolean;
+    showSections?: boolean;
 };
 
 /**
@@ -21,14 +27,19 @@ type LessonMobileHeaderProps = {
 export default function LessonMobileHeader({
     title = 'Хичээл',
     showBackButton = true,
+    courseLevel = 1,
+    courseName = 'HSK 1',
+    courseSubtitle = 'Анхан шат  150 ханз',
+    progress = 45,
+    progressMax = 150,
+    sections,
+    showStats = true,
+    showSections = true,
 }: LessonMobileHeaderProps) {
     const [open, setOpen] = useState(false);
-    const { lang, mounted } = useLanguage();
     const user = useUser();
     const router = useRouter();
     const pathname = usePathname();
-
-    const navItems = getDashboardNavItems(lang);
 
     // Close mobile menu when pathname changes to prevent stale state on navigation
     useEffect(() => {
@@ -45,6 +56,20 @@ export default function LessonMobileHeader({
         }
     };
 
+    const handleSectionClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+        e.preventDefault();
+        const id = href.startsWith('#') ? href.slice(1) : href;
+        const el = typeof document !== 'undefined' ? document.getElementById(id) : null;
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        try {
+            const search = typeof window !== 'undefined' ? window.location.search : '';
+            router.replace(`${pathname}${search}#${id}`);
+        } catch (err) {
+            // ignore replace failures
+        }
+        setOpen(false);
+    };
+
     return (
         <>
             {/* Mobile-only header */}
@@ -59,7 +84,7 @@ export default function LessonMobileHeader({
                             <MdArrowBack size={20} />
                         </button>
                     )}
-                    <span className="text-lg font-bold text-white truncate max-w-[200px]">{title}</span>
+                    <span className="text-lg font-bold text-white truncate max-w-50">{title}</span>
                 </div>
                 <button onClick={() => setOpen(true)} className="p-2 text-text-primary" aria-label="Open menu">
                     <MdMenu size={24} />
@@ -71,19 +96,36 @@ export default function LessonMobileHeader({
                 <div onClick={() => setOpen(false)} className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
                 <aside className={`absolute top-0 right-0 h-full w-72 bg-background-dark/95 backdrop-blur-lg shadow-2xl transform transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`} role="dialog" aria-modal="true">
                     <div className="flex items-center justify-between p-4 border-b border-white/5">
-                        <h2 className="text-lg font-bold text-white">Меню</h2>
+                        <button
+                            onClick={handleBack}
+                            className="flex items-center gap-2 text-text-secondary hover:text-white transition-colors"
+                            aria-label="Go back to lessons"
+                        >
+                            <MdArrowBack size={20} />
+                            <span className="text-sm font-medium">Буцах</span>
+                        </button>
                         <button onClick={() => setOpen(false)} className="p-2 text-gray-300 hover:text-white" aria-label="Close menu">
                             <MdClose size={20} />
                         </button>
                     </div>
-                    <div className="h-full overflow-auto">
-                        <div className="p-4 border-b border-white/5">
-                            <SidebarBrand />
+
+                    <div className="flex flex-col h-full">
+                        <div className="flex-1 overflow-auto">
+                            <CourseSidebarContent
+                                courseLevel={courseLevel}
+                                courseName={courseName}
+                                courseSubtitle={courseSubtitle}
+                                progress={progress}
+                                progressMax={progressMax}
+                                sections={sections}
+                                showStats={showStats}
+                                showSections={showSections}
+                                onSectionClick={handleSectionClick}
+                            />
                         </div>
 
-                        <div className="p-4 space-y-6">
+                        <div className="p-4 border-t border-white/5">
                             <SidebarUserProfile name={user.name} plan={user.plan} avatarInitial={user.avatarInitial} variant="default" />
-                            {mounted && <SidebarNav items={navItems} />}
                         </div>
                     </div>
                 </aside>
