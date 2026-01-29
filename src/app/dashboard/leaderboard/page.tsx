@@ -150,7 +150,7 @@ export default function LeaderboardPage() {
             </div>
 
             {/* Floating Action Button (FAB) - Invite Friends */}
-            <div className="fixed bottom-28 right-6 md:right-10 z-50">
+            <div className="fixed bottom-30 right-5 md:right-10 z-50">
                 <button className="flex items-center gap-2 bg-primary hover:bg-green-400 text-black font-bold py-3 px-6 rounded-full shadow-[0_0_20px_rgba(37,244,54,0.3)] transition-all transform hover:scale-105 active:scale-95 group">
                     <MdPeople className="group-hover:animate-pulse" />
                     <span>Найзуудаа урих</span>

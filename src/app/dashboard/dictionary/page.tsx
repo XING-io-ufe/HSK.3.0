@@ -1,8 +1,25 @@
 "use client";
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { MdSearch, MdFilterList, MdVolumeUp, MdViewInAr, MdClose, MdStar, MdAccountTree, MdDraw, MdPlayArrow, MdFormatQuote, MdHistoryEdu, MdGridView, MdTranslate, MdQuiz } from '@/components/icons/material';
 
 export default function DictionaryPage() {
+    const [isDesktop, setIsDesktop] = useState(false);
+    const [drawerOpen, setDrawerOpen] = useState(false);
+
+    useEffect(() => {
+        const mq = window.matchMedia('(min-width: 1024px)');
+        const sync = (match: boolean) => {
+            setIsDesktop(match);
+            setDrawerOpen(match); // desktop shows by default; mobile closed until toggled
+        };
+        sync(mq.matches);
+        const listener = (e: MediaQueryListEvent) => sync(e.matches);
+        mq.addEventListener('change', listener);
+        return () => mq.removeEventListener('change', listener);
+    }, []);
+
+    const showDrawer = drawerOpen;
     return (
         <div className="bg-background-dark font-display text-white flex flex-col h-screen overflow-hidden">
             <div className="flex flex-1 overflow-hidden">
@@ -129,12 +146,21 @@ export default function DictionaryPage() {
                 </main>
 
                 {/* Detail Drawer */}
-                <aside className="w-100 border-l border-[#2a3a27] bg-[#0d140c] overflow-y-auto hidden lg:block">
+                {showDrawer && !isDesktop && (
+                    <div className="fixed inset-0 z-20 bg-black/40 backdrop-blur-sm" onClick={() => setDrawerOpen(false)} />
+                )}
+                <aside
+                    className={`
+                        ${showDrawer ? '' : 'hidden'}
+                        ${isDesktop ? 'w-[400px] border-l border-[#2a3a27] bg-[#0d140c] hidden lg:block' : 'fixed inset-0 z-30 w-full bg-[#0d140c]'}
+                        overflow-y-auto
+                    `.trim()}
+                >
                     <div className="p-6 space-y-8">
                         {/* Header */}
                         <div className="flex items-center justify-between">
                             <span className="text-xs font-bold text-primary/60 uppercase tracking-widest">Дэлгэрэнгүй мэдээлэл</span>
-                            <button className="text-white/40 hover:text-white"><MdClose /></button>
+                            <button className="text-white/40 hover:text-white" onClick={() => setDrawerOpen(false)}><MdClose /></button>
                         </div>
 
                         {/* Main Preview */}
@@ -263,8 +289,11 @@ export default function DictionaryPage() {
             </div>
 
             {/* Floating Mobile Controls */}
-            <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 flex gap-4 bg-background-dark/90 backdrop-blur-xl p-4 rounded-2xl border border-primary/20 shadow-2xl">
-                <button className="w-12 h-12 rounded-xl bg-primary text-background-dark flex items-center justify-center font-bold">
+            <div className="fixed bottom-6 left-1/2 lg:left-auto lg:right-6 -translate-x-1/2 lg:translate-x-0 flex gap-4 bg-background-dark/90 backdrop-blur-xl p-4 rounded-2xl border border-primary/20 shadow-2xl z-30">
+                <button
+                    className="w-12 h-12 rounded-xl bg-primary text-background-dark flex items-center justify-center font-bold"
+                    onClick={() => setDrawerOpen(true)}
+                >
                     <MdGridView />
                 </button>
                 <button className="w-12 h-12 rounded-xl bg-[#2a3a27] text-white flex items-center justify-center font-bold">

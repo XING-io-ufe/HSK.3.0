@@ -80,7 +80,7 @@ export default function DashboardHeader({
             {/* Mobile menu overlay */}
             <div className={`fixed inset-0 z-50 transition-opacity ${open ? 'opacity-100 visible' : 'opacity-0 invisible'}`} aria-hidden={!open}>
                 <div onClick={() => setOpen(false)} className="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-                <aside className={`absolute top-0 right-0 h-full w-72 bg-background-dark/95 backdrop-blur-lg shadow-2xl transform transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`} role="dialog" aria-modal="true">
+                <aside className={`absolute top-0 right-0 h-full w-72 bg-background-dark/95 overflow-y-auto no-scrollbar backdrop-blur-lg shadow-2xl transform transition-transform duration-300 ${open ? 'translate-x-0' : 'translate-x-full'}`} role="dialog" aria-modal="true">
                     <div className="flex items-center justify-between p-4 border-b border-white/5">
                         <div>
                             <h2 className="text-lg font-bold text-white">Меню</h2>
