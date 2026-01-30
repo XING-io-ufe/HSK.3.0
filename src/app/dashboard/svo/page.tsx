@@ -81,7 +81,7 @@ export default function SVOExercisePage() {
     };
 
     return (
-        <div className="bg-background-dark text-white min-h-screen flex-1 flex-col overflow-y-auto">
+        <div className="bg-background-dark text-white h-screen flex flex-col overflow-y-auto">
             {/* Background Grid Effect */}
             <div className="fixed inset-0 pointer-events-none z-0 opacity-15" style={{
                 backgroundImage: 'linear-gradient(to right, #1f2e1f 1px, transparent 1px), linear-gradient(to bottom, #1f2e1f 1px, transparent 1px)',
@@ -168,6 +168,7 @@ export default function SVOExercisePage() {
                             className="flex flex-wrap justify-center gap-4 md:gap-6"
                             onDragOver={(e) => e.preventDefault()}
                             onDrop={() => handleDrop('pool')}
+                            data-slot="pool"
                         >
                             {WORD_CHIPS.map((word) => (
                                 <DraggableChip
@@ -177,6 +178,7 @@ export default function SVOExercisePage() {
                                     isPlaced={Object.values(placed).includes(word.id)}
                                     onDragStart={() => handleDragStart(word.id)}
                                     onDragEnd={handleDragEnd}
+                                    onTouchDrop={(slot) => handleDrop(slot as 'subject' | 'verb' | 'object' | 'pool')}
                                 />
                             ))}
                         </div>
@@ -185,7 +187,7 @@ export default function SVOExercisePage() {
             </main>
 
             {/* Footer Actions */}
-            <footer className="sticky bottom-0 z-20 w-full bg-background-dark/90 backdrop-blur-lg border-t border-[#283929]">
+            <footer className="relative bottom-0 z-20 w-full bg-background-dark/90 backdrop-blur-lg border-t border-[#283929]">
                 <div className="max-w-5xl mx-auto px-4 py-4 md:py-6 flex justify-between items-center">
                     <button
                         onClick={handleSkip}
@@ -216,6 +218,7 @@ function DropZone({ slot, word, onDrop, onDragStartWord }: { slot: string; word?
     return (
         <div
             draggable={false}
+            data-slot={slot}
             onDragOver={(e) => e.preventDefault()}
             onDrop={onDrop}
             className="relative w-32 h-20 md:w-40 md:h-24 rounded-xl border-2 border-[#283929] bg-[#111811] flex items-center justify-center transition-colors hover:border-primary/50 group cursor-drop"
@@ -223,6 +226,7 @@ function DropZone({ slot, word, onDrop, onDragStartWord }: { slot: string; word?
             {word ? (
                 <div
                     draggable
+                    onTouchStart={() => onDragStartWord(word.id)}
                     onDragStart={(e) => {
                         e.dataTransfer!.effectAllowed = 'move';
                         onDragStartWord(word.id);
@@ -250,16 +254,32 @@ function DraggableChip({
     isPlaced,
     onDragStart,
     onDragEnd,
+    onTouchDrop,
 }: {
     word: WordChip;
     isDragging: boolean;
     isPlaced: boolean;
     onDragStart: () => void;
     onDragEnd: () => void;
+    onTouchDrop: (slot: string) => void;
 }) {
+    const handleTouchStart = () => {
+        onDragStart();
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        const touch = e.changedTouches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        const slot = element?.getAttribute('data-slot') || 'pool';
+        onTouchDrop(slot);
+        onDragEnd();
+    };
+
     return (
         <div
             draggable
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
             className={`cursor-grab active:cursor-grabbing transition-all transform hover:-translate-y-1 w-32 h-20 md:w-40 md:h-24 rounded-xl flex flex-col items-center justify-center relative group select-none shadow-lg ${isPlaced ? 'opacity-40 cursor-not-allowed' : ''

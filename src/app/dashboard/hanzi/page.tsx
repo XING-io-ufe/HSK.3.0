@@ -47,7 +47,7 @@ export default function HanziPracticePage() {
     };
 
     return (
-        <div className="bg-background-dark text-white min-h-screen relative overflow-y-auto selection:bg-primary selection:text-black">
+        <div className="bg-background-dark text-white h-screen relative overflow-hidden selection:bg-primary selection:text-black">
             <div className="fixed top-[-10%] left-[-10%] w-64 h-64 bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
             <div className="fixed bottom-[-5%] right-[-5%] w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
 

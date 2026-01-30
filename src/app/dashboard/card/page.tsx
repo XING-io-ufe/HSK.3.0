@@ -15,7 +15,7 @@ export default function FlashCardPage() {
     };
 
     return (
-        <div className="bg-background-dark text-white min-h-screen flex flex-col overflow-hidden selection:bg-primary selection:text-black">
+        <div className="bg-background-dark text-white h-screen flex flex-col overflow-auto selection:bg-primary selection:text-black">
             {/* Header */}
             <header className="w-full px-4 pt-6 pb-2 z-50">
                 <div className="max-w-md mx-auto flex flex-col gap-4">

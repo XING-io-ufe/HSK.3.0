@@ -91,7 +91,7 @@ export default async function StatisticsPage() {
     const stats = await getStats();
 
     return (
-        <div className="flex-1 min-h-0 bg-background-dark overflow-auto text-white p-6 md:p-8">
+        <div className="flex-1 min-h-0 bg-background-dark overflow-y-auto text-white p-6 md:p-8">
             <div className="max-w-6xl mx-auto">
                 <div className="mb-8">
                     <h1 className="text-2xl md:text-3xl font-bold mb-2">Статистик</h1>
