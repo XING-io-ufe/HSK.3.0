@@ -47,7 +47,6 @@ export default function DashboardPage() {
                             onRotate={handleDailyRotate}
                             renderFront={(c) => <DashboardFront card={c} />}
                             renderBack={(c) => <DashboardBack card={c} />}
-                            maxHeightClass="max-h-[560px]"
                             buttonLabelFront="Эргүүлэх"
                             buttonLabelBack="Дараагийн ханз"
                         />
