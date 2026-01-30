@@ -26,6 +26,7 @@ export default function SVOExercisePage() {
         object: null,
     });
     const [draggedId, setDraggedId] = useState<string | null>(null);
+    const [selectedId, setSelectedId] = useState<string | null>(null);
 
     const handleDragStart = (id: string) => {
         setDraggedId(id);
@@ -61,6 +62,33 @@ export default function SVOExercisePage() {
             });
 
             setDraggedId(null);
+        }
+    };
+
+    const handleDropZoneClick = (slot: 'subject' | 'verb' | 'object') => {
+        if (selectedId) {
+            const word = WORD_CHIPS.find((w) => w.id === selectedId);
+            if (!word) {
+                setSelectedId(null);
+                return;
+            }
+
+            const clearPrevious = (updated: typeof placed) => {
+                Object.keys(updated).forEach((key) => {
+                    if (updated[key] === selectedId) {
+                        updated[key] = null;
+                    }
+                });
+            };
+
+            setPlaced((prev) => {
+                const updated = { ...prev };
+                clearPrevious(updated);
+                updated[slot] = selectedId;
+                return updated;
+            });
+
+            setSelectedId(null);
         }
     };
 
@@ -151,12 +179,14 @@ export default function SVOExercisePage() {
                         {/* Drop Zones */}
                         <div className="flex flex-wrap justify-center gap-3 md:gap-6 min-h-30 items-center p-4 rounded-2xl bg-[#0f160f]/50 border border-dashed border-[#283929]">
                             {(['subject', 'verb', 'object'] as const).map((slot, idx) => (
-                                <div key={slot} className="flex items-center">
+                                <div key={slot} className="flex justify-center items-center">
                                     <DropZone
                                         slot={slot}
                                         word={placedWords[slot]}
                                         onDrop={() => handleDrop(slot)}
                                         onDragStartWord={handleDragStart}
+                                        onClick={() => handleDropZoneClick(slot)}
+                                        isSelected={selectedId !== null && placedWords[slot] === undefined}
                                     />
                                     {idx < 2 && <MdArrowForward className="text-[#283929] hidden sm:block mx-3" />}
                                 </div>
@@ -175,9 +205,11 @@ export default function SVOExercisePage() {
                                     key={word.id}
                                     word={word}
                                     isDragging={draggedId === word.id}
+                                    isSelected={selectedId === word.id}
                                     isPlaced={Object.values(placed).includes(word.id)}
                                     onDragStart={() => handleDragStart(word.id)}
                                     onDragEnd={handleDragEnd}
+                                    onTouchSelect={() => setSelectedId(selectedId === word.id ? null : word.id)}
                                     onTouchDrop={(slot) => handleDrop(slot as 'subject' | 'verb' | 'object' | 'pool')}
                                 />
                             ))}
@@ -214,14 +246,15 @@ export default function SVOExercisePage() {
     );
 }
 
-function DropZone({ slot, word, onDrop, onDragStartWord }: { slot: string; word?: WordChip; onDrop: () => void; onDragStartWord: (id: string) => void }) {
+function DropZone({ slot, word, onDrop, onDragStartWord, onClick, isSelected }: { slot: string; word?: WordChip; onDrop: () => void; onDragStartWord: (id: string) => void; onClick?: () => void; isSelected?: boolean }) {
     return (
         <div
             draggable={false}
             data-slot={slot}
             onDragOver={(e) => e.preventDefault()}
             onDrop={onDrop}
-            className="relative w-32 h-20 md:w-40 md:h-24 rounded-xl border-2 border-[#283929] bg-[#111811] flex items-center justify-center transition-colors hover:border-primary/50 group cursor-drop"
+            onClick={onClick}
+            className={`relative flex justify-center items-center w-32 h-20 md:w-40 md:h-24 rounded-xl border-2 transition-colors group cursor-drop ${isSelected ? 'border-primary bg-primary/10' : 'border-[#283929] bg-[#111811] hover:border-primary/50'}`}
         >
             {word ? (
                 <div
@@ -251,20 +284,24 @@ function DropZone({ slot, word, onDrop, onDragStartWord }: { slot: string; word?
 function DraggableChip({
     word,
     isDragging,
+    isSelected,
     isPlaced,
     onDragStart,
     onDragEnd,
+    onTouchSelect,
     onTouchDrop,
 }: {
     word: WordChip;
     isDragging: boolean;
+    isSelected: boolean;
     isPlaced: boolean;
     onDragStart: () => void;
     onDragEnd: () => void;
+    onTouchSelect: () => void;
     onTouchDrop: (slot: string) => void;
 }) {
     const handleTouchStart = () => {
-        onDragStart();
+        onTouchSelect();
     };
 
     const handleTouchEnd = (e: React.TouchEvent) => {
@@ -282,14 +319,14 @@ function DraggableChip({
             onTouchEnd={handleTouchEnd}
             onDragStart={onDragStart}
             onDragEnd={onDragEnd}
-            className={`cursor-grab active:cursor-grabbing transition-all transform hover:-translate-y-1 w-32 h-20 md:w-40 md:h-24 rounded-xl flex flex-col items-center justify-center relative group select-none shadow-lg ${isPlaced ? 'opacity-40 cursor-not-allowed' : ''
+            className={`cursor-grab active:cursor-grabbing transition-all transform hover:-translate-y-1 w-32 h-20 md:w-40 md:h-24 rounded-xl flex flex-col items-center justify-center relative group select-none shadow-lg ${isSelected ? 'ring-2 ring-primary bg-primary/10' : ''} ${isPlaced ? 'opacity-40 cursor-not-allowed' : ''
                 }`}
             style={{
-                background: isDragging ? 'rgba(19, 236, 37, 0.2)' : 'rgba(255, 255, 255, 0.03)',
+                background: isSelected ? 'rgba(19, 236, 37, 0.15)' : isDragging ? 'rgba(19, 236, 37, 0.2)' : 'rgba(255, 255, 255, 0.03)',
                 backdropFilter: 'blur(10px)',
                 WebkitBackdropFilter: 'blur(10px)',
-                border: isDragging ? '1px solid rgba(19, 236, 37, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: isDragging ? '0 0 10px rgba(37, 244, 54, 0.3)' : '0 4px 30px rgba(0, 0, 0, 0.1)',
+                border: isSelected ? '1px solid rgba(37, 244, 54, 0.8)' : isDragging ? '1px solid rgba(19, 236, 37, 0.5)' : '1px solid rgba(255, 255, 255, 0.1)',
+                boxShadow: isSelected ? '0 0 15px rgba(37, 244, 54, 0.6)' : isDragging ? '0 0 10px rgba(37, 244, 54, 0.3)' : '0 4px 30px rgba(0, 0, 0, 0.1)',
             }}
         >
             <span className="text-3xl md:text-4xl text-white font-serif mb-1">{word.char}</span>

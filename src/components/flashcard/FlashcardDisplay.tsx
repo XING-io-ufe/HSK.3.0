@@ -10,7 +10,6 @@ export type FlashcardDisplayProps = {
     renderBack: (card: Card) => ReactNode;
     buttonLabelFront?: string;
     buttonLabelBack?: string;
-    maxHeightClass?: string;
 };
 
 export function FlashcardDisplay({
@@ -21,16 +20,17 @@ export function FlashcardDisplay({
     renderBack,
     buttonLabelFront = 'ЭРГҮҮЛЭХ',
     buttonLabelBack = 'ДАРАА',
-    maxHeightClass = 'max-h-150',
 }: FlashcardDisplayProps) {
     return (
         <div className="w-full max-w-sm h-full relative">
-            <div className={`w-full h-full ${maxHeightClass} glass-panel rounded-[2.5rem] p-2 shadow-glass relative flex flex-col transition-transform duration-300`}>
-                <div className="flex-1 flex justify-center items-center overflow-hidden">
-                    {isFlipped ? renderBack(card) : renderFront(card)}
+            <div className={`flex-1 glass-panel rounded-[2.5rem] p-2 shadow-glass relative flex flex-col transition-transform duration-300 min-h-0`}>
+                <div className="flex-1 min-h-0 flex justify-center items-stretch overflow-y-auto overscroll-contain px-1">
+                    <div className="w-full">
+                        {isFlipped ? renderBack(card) : renderFront(card)}
+                    </div>
                 </div>
 
-                <div className="p-3 px-6 pb-6">
+                <div className="p-3 px-6 pb-6 shrink-0">
                     <button
                         onClick={onRotate}
                         className="w-full py-4 bg-primary text-black rounded-3xl font-bold text-lg flex items-center justify-center gap-3 shadow-[0_0_25px_rgba(19,236,37,0.4)] hover:shadow-[0_0_35px_rgba(19,236,37,0.6)] active:scale-95 transition-all"

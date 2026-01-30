@@ -47,7 +47,7 @@ export default function FlashCardPage() {
             </header>
 
             {/* Main Content */}
-            <main className="grow flex items-center justify-center px-4 py-2 relative overflow-hidden">
+            <main className="grow flex items-center justify-center px-6 py-2 relative overflow-y-auto">
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
 
                 <FlashcardDisplay
@@ -56,7 +56,6 @@ export default function FlashCardPage() {
                     onRotate={handleRotate}
                     renderFront={(c) => <FrontSide card={c} />}
                     renderBack={(c) => <BackSide card={c} detail={getCardDetail(c)} />}
-                    maxHeightClass="max-h-[600px]"
                 />
             </main>
 
@@ -66,9 +65,6 @@ export default function FlashCardPage() {
                     <MdAutoAwesome className="text-3xl group-hover:scale-110 transition-transform" />
                 </button>
             </div>
-
-            {/* Bottom Separator */}
-            <div className="w-full h-1 bg-white/5 max-w-30 mx-auto mb-2 rounded-full"></div>
         </div>
     );
 }
@@ -88,7 +84,7 @@ function FrontSide({ card }: { card: Card }) {
 
 function BackSide({ card, detail }: { card: Card; detail: CardBackDetail }) {
     return (
-        <div className="flex flex-col h-full px-4 pt-4 pb-2 gap-3 overflow-hidden">
+        <div className="flex flex-col h-full px-4 pt-4 pb-2 gap-3 overflow-y-auto">
             <div className="text-center">
                 <span className="text-gray-400 text-xl font-light block">{card.char}</span>
                 <h2 className="text-2xl font-bold text-primary leading-tight tracking-wide">
