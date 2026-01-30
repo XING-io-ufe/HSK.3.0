@@ -9,6 +9,9 @@ import {
     MdLeaderboard,
     MdOutlineAbc,
     MdTranslate,
+    MdStyle,
+    MdDraw,
+    MdSchema,
 } from '@/components/icons/material';
 import { t } from '@/components/i18n/translations';
 import type { Lang } from '@/components/i18n/translations';
@@ -56,6 +59,21 @@ export function getDashboardNavItems(lang: Lang): NavItem[] {
             href: '/dashboard/dictionary',
             label: t(lang, 'dashboardNavDictionary'),
             icon: <MdTranslate className="text-[20px]" />,
+        },
+        {
+            href: '/dashboard/card',
+            label: t(lang, 'dashboardNavCard'),
+            icon: <MdStyle className="text-[20px]" />,
+        },
+        {
+            href: '/dashboard/hanzi',
+            label: t(lang, 'dashboardNavHanzi'),
+            icon: <MdDraw className="text-[20px]" />,
+        },
+        {
+            href: '/dashboard/svo',
+            label: t(lang, 'dashboardNavSVO'),
+            icon: <MdSchema className="text-[20px]" />,
         },
         {
             href: '/dashboard/settings',

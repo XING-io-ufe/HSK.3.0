@@ -1,6 +1,13 @@
-import { MdMenuBook, MdTimer, MdSync, MdLayers } from '@/components/icons/material';
+"use client";
+import { MdMenuBook, MdTimer, MdLayers } from '@/components/icons/material';
+import { FlashcardDisplay } from '@/components/flashcard/FlashcardDisplay';
+import { useFlashcard } from '@/components/flashcard/useFlashcard';
+import { FLASHCARDS } from '@/components/flashcard/data';
+import type { Card } from '@/components/flashcard/data';
 
 export default function DashboardPage() {
+    const { card: dailyCard, isFlipped: isDailyFlipped, handleRotate: handleDailyRotate } = useFlashcard(FLASHCARDS);
+
     return (
         <div className="flex-1 overflow-y-auto p-4 md:p-8">
             <div className="max-w-6xl mx-auto space-y-8">
@@ -32,19 +39,18 @@ export default function DashboardPage() {
                         </div>
                     </div>
 
-                    <div className="glass-card rounded-2xl p-6 relative flex flex-col items-center text-center justify-between border-t border-primary/20">
+                    <div className="glass-card rounded-2xl p-4 relative flex flex-col items-center text-center border-t border-primary/20">
                         <div className="absolute top-2 right-2 text-xs font-bold text-primary border border-primary/30 px-2 py-0.5 rounded-full">Өдрийн ханз</div>
-                        <div className="mt-4 mb-6 relative w-full flex-1 flex items-center justify-center">
-                            <div className="relative z-10">
-                                <h3 className="text-7xl md:text-8xl font-black text-white mb-2">爱</h3>
-                                <p className="text-gray-400 text-lg">Ài</p>
-                            </div>
-                            <div className="absolute inset-0 bg-primary/10 blur-3xl rounded-full transform scale-50 z-0"></div>
-                        </div>
-                        <button className="w-full py-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 text-white font-medium transition-all flex items-center justify-center gap-2 group">
-                            <MdSync className="group-hover:rotate-180 transition-transform duration-500" />
-                            Эргүүлэх (Flip)
-                        </button>
+                        <FlashcardDisplay
+                            card={dailyCard}
+                            isFlipped={isDailyFlipped}
+                            onRotate={handleDailyRotate}
+                            renderFront={(c) => <DashboardFront card={c} />}
+                            renderBack={(c) => <DashboardBack card={c} />}
+                            maxHeightClass="max-h-[560px]"
+                            buttonLabelFront="Эргүүлэх"
+                            buttonLabelBack="Дараагийн ханз"
+                        />
                     </div>
                 </div>
 
@@ -91,6 +97,25 @@ export default function DashboardPage() {
                     </div>
                 </div>
             </div>
+        </div>
+    );
+}
+
+function DashboardFront({ card }: { card: Card }) {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-2 py-6">
+            <span className="text-6xl font-black text-white tracking-tight">{card.char}</span>
+            <span className="text-lg text-gray-300">{card.pinyin}</span>
+        </div>
+    );
+}
+
+function DashboardBack({ card }: { card: Card }) {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center gap-3 py-6 text-center px-6">
+            <span className="text-5xl font-black text-primary tracking-tight">{card.char}</span>
+            <p className="text-xl font-bold text-white">{card.meaning}</p>
+            <p className="text-sm text-gray-400">Дараагийн ханз руу шилжихийн тулд дахин эргүүлээрэй.</p>
         </div>
     );
 }

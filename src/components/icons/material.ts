@@ -61,6 +61,12 @@ import {
     MdCancel,
     MdOutlineAbc,
     MdStar,
+    MdChevronLeft,
+    MdCached,
+    MdAutoAwesome,
+    MdSkipNext,
+    MdInfo,
+    MdSchema,
 } from "react-icons/md";
 
 export {
@@ -126,4 +132,10 @@ export {
     MdCancel,
     MdOutlineAbc,
     MdStar,
+    MdChevronLeft,
+    MdCached,
+    MdAutoAwesome,
+    MdSkipNext,
+    MdInfo,
+    MdSchema,
 };
